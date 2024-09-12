@@ -629,7 +629,11 @@ func RelativizePathWithNoBacksteps(refs []*string, base string) error {
 			}
 
 			// if we have a backstep, don't mess with the path
-			if strings.HasPrefix(rel, "../") {
+			backstepPrefix := "../"
+			if goruntime.GOOS == "windows" {
+				backstepPrefix = `..\`
+			}
+			if strings.HasPrefix(rel, backstepPrefix) {
 				if filepath.IsAbs(*ref) {
 					continue
 				}
